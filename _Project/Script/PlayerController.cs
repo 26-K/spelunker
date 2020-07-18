@@ -71,10 +71,16 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerAction()
     {
+        bool debug = false;
         //スペースキーを押した時にジャンプする。上昇中はジャンプできない
         if (Input.GetKeyDown(KeyCode.Space) && jumpFlag == true && rgd.velocity.y <= 0)
         {
-
+            jumpFlag = false;
+            Vector2 vec = new Vector2(0, jumpPower);
+            rgd.AddForce(vec);
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && debug)
+        {
             jumpFlag = false;
             Vector2 vec = new Vector2(0, jumpPower);
             rgd.AddForce(vec);
