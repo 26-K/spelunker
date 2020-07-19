@@ -11,25 +11,34 @@ public class BackGround : MonoBehaviour
     int spriteCount = 2; //背景オブジェクトの横の数
 
     float width;
+    Vector3 beforeCameraPos = new Vector3(0, 0, 0);
+
+    float basePosy;
 
     //初期化
     private void Start()
     {
         // スプライトの幅を取得
         width = GetComponent<SpriteRenderer>().bounds.size.x;
+        basePosy = this.transform.position.y;
     }
 
     void LateUpdate()
     {
+        var diffPos = beforeCameraPos - Camera.main.transform.position;
+        diffPos.z = 0;
+        transform.position += diffPos * speedRatio;
+        transform.position = new Vector3(this.transform.position.x, Camera.main.transform.position.y + basePosy, transform.position.z);
         var camPos = Camera.main.transform.position;
         if (camPos.x >= transform.position.x + width) //カメラからある程度右に離れた時
         {
-            transform.position += Vector3.right * width * spriteCount + Vector3.left;
+            transform.position += Vector3.right * width * spriteCount - Vector3.right;
         }
         else if (camPos.x <= transform.position.x - width) //カメラからある程度左に離れた時
         {
-            this.transform.position += Vector3.left * width * spriteCount + Vector3.right;
+            this.transform.position += Vector3.left * width * spriteCount - Vector3.left;
         }
+        beforeCameraPos = Camera.main.transform.position;
     }
 
     //カメラ外に出たときの処理
